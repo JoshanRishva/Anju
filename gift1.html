@@ -1,0 +1,177 @@
+<!-- gift1.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surprise for Arunaethi 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #ffccf9, #ffc3a0);
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      text-align: center;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-top: 40px;
+      color: #ff4081;
+      text-shadow: 2px 2px 10px #e91e63;
+    }
+
+    .message {
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #ffffff;
+      padding: 0 10px;
+    }
+
+    img.message {
+      width: 80%;
+      max-width: 320px;
+      border-radius: 20px;
+      margin-top: 30px;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .code-container {
+      position: relative;
+      margin-top: 30px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .code-container input {
+      padding: 12px;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 1em;
+      text-align: center;
+    }
+
+    .code-container button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff4081;
+      color: #fff;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(233, 30, 99, 0.6);
+    }
+
+    .code-container button:hover {
+      background-color: #e91e63;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8em;
+        margin-top: 25px;
+      }
+
+      .message {
+        font-size: 1em;
+      }
+
+      .code-container input,
+      .code-container button {
+        font-size: 0.9em;
+        width: 90%;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<h1>🎁 Surprise, Arunaethi! 🎉</h1>
+<h1>HINT</h1>
+<img class="message" src="monkey.png" alt="Funny Monkey Hint">
+
+<div class="code-container">
+  <input type="text" id="secretInput" placeholder="Enter your secret code">
+  <button onclick="checkCode()">Submit</button>
+</div>
+
+<script>
+// Confetti animation
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const pieces = [];
+for (let i = 0; i < 100; i++) {
+  pieces.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    radius: Math.random() * 6 + 4,
+    color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+    velocity: Math.random() * 2 + 1,
+    tilt: Math.random() * 10 - 5
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let p of pieces) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+    p.y += p.velocity;
+    p.x += Math.sin(p.y * 0.05) + p.tilt * 0.1;
+
+    if (p.y > canvas.height) {
+      p.y = -10;
+      p.x = Math.random() * canvas.width;
+    }
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// Secret code logic
+function checkCode() {
+  const secretCode = "18/03/2023"; // Replace with your real secret code
+  const input = document.getElementById('secretInput').value.trim();
+
+  if (input === secretCode) {
+    window.location.href = "gift2.html"; // Replace with your next puzzle page
+  } else {
+    alert("❌ Oops! That's not the right code.");
+  }
+}
+
+// Enable Enter key to also submit
+const inputBox = document.getElementById('secretInput');
+inputBox.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    checkCode();
+  }
+});
+</script>
+
+</body>
+</html>

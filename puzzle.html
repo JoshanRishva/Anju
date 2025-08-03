@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unravel the Mystery</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f7e1ff, #e1d7ff);
+      font-family: 'Comic Sans MS', cursive;
+      color: #4b006e;
+      text-align: center;
+      padding: 30px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 40px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 1.2em;
+      border: 2px solid #a855f7;
+      border-radius: 8px;
+      width: 300px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: #9333ea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #7e22ce;
+    }
+
+    #loading {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #9f1239;
+    }
+
+    #hint {
+      margin-top: 15px;
+      font-style: italic;
+      color: #6b21a8;
+    }
+
+    .emoji {
+      position: absolute;
+      animation: float 6s linear infinite;
+      font-size: 30px;
+      opacity: 0.7;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+      }
+    }
+
+    .firework {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+      z-index: 9999;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(4); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💌 A Puzzle of Love, Joy & Everything 💌</h1>
+  <div id="question">💖 What does 'love' truly mean?</div>
+  <br />
+  <input type="text" id="answerInput" placeholder="Type your magical word..." />
+  <button onclick="checkAnswer()">Reveal</button>
+  <div id="loading">✨ Unfolding your answer...</div>
+  <div id="hint"></div>
+
+  <script>
+    const questions = [
+      { q: "💖 what does KADHAL means to me?", a: "arunaethi" },
+      { q: "😊 Mirror of love?", a: "arunaethi" },
+      { q: "🌌 ava enna enna thedi vantha ?", a: "anjalaa" }
+    ];
+    let current = 0;
+    let hintProgress = 0;
+
+    function showQuestion() {
+      document.getElementById("question").textContent = questions[current].q;
+      document.getElementById("answerInput").value = "";
+      document.getElementById("hint").textContent = "";
+      document.getElementById("loading").style.display = "none";
+    }
+
+    function showFireworks(x, y) {
+      for (let i = 0; i < 20; i++) {
+        const fw = document.createElement("div");
+        fw.className = "firework";
+        fw.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        fw.style.left = `${x + (Math.random() * 100 - 50)}px`;
+        fw.style.top = `${y + (Math.random() * 100 - 50)}px`;
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1000);
+      }
+    }
+
+    function checkAnswer() {
+      const input = document.getElementById("answerInput");
+      const loading = document.getElementById("loading");
+      const hintDiv = document.getElementById("hint");
+
+      loading.style.display = "block";
+      hintDiv.textContent = "";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+        const answer = input.value.trim().toLowerCase();
+
+        if (answer === questions[current].a) {
+          const rect = input.getBoundingClientRect();
+          showFireworks(rect.x + rect.width / 2, rect.y + rect.height / 2);
+
+          current++;
+          hintProgress = 0;
+          if (current < questions.length) {
+            showQuestion();
+          } else {
+            // grand blast
+            input.style.transition = "all 1s ease";
+            input.style.transform = "scale(1.2) rotate(360deg)";
+            document.querySelector("button").style.transform = "scale(1.2) rotate(360deg)";
+            showFireworks(window.innerWidth / 2, window.innerHeight / 2);
+            showFireworks(window.innerWidth / 2 + 100, window.innerHeight / 2);
+            showFireworks(window.innerWidth / 2 - 100, window.innerHeight / 2);
+            setTimeout(() => {
+              window.location.href = "gift1.html";
+            }, 3000);
+          }
+        } else {
+          // Show hint
+          const correct = questions[current].a;
+          let visible = "";
+          for (let i = 0; i < correct.length; i++) {
+            visible += Math.random() < hintProgress / correct.length ? correct[i] : "_";
+          }
+          hintProgress += 2;
+          hintDiv.textContent = `🧩 Whisper from the universe: ${visible}`;
+        }
+      }, 5000);
+    }
+
+    function floatEmojis() {
+      const emojis = ["🎈", "🎉", "💜", "🧁", "🍰", "🎊"];
+      setInterval(() => {
+        const emoji = document.createElement("div");
+        emoji.className = "emoji";
+        emoji.style.left = `${Math.random() * 100}vw`;
+        emoji.style.animationDuration = `${4 + Math.random() * 4}s`;
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 8000);
+      }, 500);
+    }
+
+    floatEmojis();
+    showQuestion();
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") checkAnswer();
+    });
+  </script>
+</body>
+</html>

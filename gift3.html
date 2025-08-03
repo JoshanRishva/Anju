@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AJ Heart Touch Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #ffe0f0, #ffb6c1);
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 6vw;
+      color: #880e4f;
+      margin-top: 4vh;
+    }
+
+    #heart {
+      font-size: 10vw;
+      position: absolute;
+      top: 40vh;
+      left: 45vw;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    #finalImage {
+      display: none;
+      position: absolute;
+      top: 25vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      height: 250px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    #secretPage {
+      display: none;
+      margin-top: 10vh;
+    }
+
+    #secretHintImage {
+      width: 250px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    #secretInput {
+      padding: 10px;
+      font-size: 1em;
+      width: 200px;
+      border-radius: 8px;
+      border: 2px solid #ec407a;
+      margin-bottom: 10px;
+    }
+
+    #submitBtn {
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #f06292;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Tap the Heart 💖</h1>
+<div id="heart">💖</div>
+<img id="finalImage" src="heart.png" alt="Final Image">
+
+<div id="secretPage">
+  <img id="secretHintImage" src="noodles1.jpg" alt="Hint Image">
+  <br>
+  <input type="text" id="secretInput" placeholder="Enter Code">
+  <br>
+  <button id="submitBtn" onclick="gotoGift()">Submit</button>
+</div>
+
+<script>
+let touchCount = 0;
+const heart = document.getElementById("heart");
+const finalImage = document.getElementById("finalImage");
+const secretPage = document.getElementById("secretPage");
+
+heart.addEventListener("click", () => {
+  touchCount++;
+  heart.style.transform = `scale(${1 + touchCount * 0.2})`;
+
+  if (touchCount === 5) {
+    heart.style.display = "none";
+    finalImage.style.display = "block";
+  }
+});
+
+finalImage.addEventListener("click", () => {
+  finalImage.style.display = "none";
+  secretPage.style.display = "block";
+});
+
+function gotoGift() {
+  const code = document.getElementById("secretInput").value.trim();
+  if (code === "0840") {
+    window.location.href = "gift4.html";
+  } else {
+    alert("Wrong Code! Try again brooo!");
+  }
+}
+</script>
+
+</body>
+</html>
